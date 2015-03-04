@@ -195,6 +195,11 @@ public class DefaultAttributeMap implements AttributeMap {
             remove0();
         }
 
+        @Override
+        public T getAndRemoveValue() {
+            return getAndSet(null);
+        }
+
         private void remove0() {
             synchronized (head) {
                 // We only update the linked-list structure if prev != null because if it is null this

@@ -43,16 +43,26 @@ public interface Attribute<T> {
     T getAndSet(T value);
 
     /**
-     *  Atomically sets to the given value if this {@link Attribute} does not contain a value at the moment.
+     *  Atomically sets to the given value if this {@link Attribute}'s value is {@code null}.
      *  If it was not possible to set the value as it contains a value it will just return the current value.
      */
     T setIfAbsent(T value);
 
     /**
-     * Removes this attribute from the {@link AttributeMap} and returns the old value..  Subsequent {@link #get()}
-     * calls will return @{code null}.
+     * Removes this attribute from the {@link AttributeMap} and returns the old value. Subsequent {@link #get()}
+     * calls will return {@code null}.
+     *
+     * If you only want to return the old value and clear the {@link Attribute} while still keep it in
+     * {@link AttributeMap} use {@link #getAndRemoveValue()}.
      */
     T getAndRemove();
+
+    /**
+     * Returns the old value and clears the value. Subsequent {@link #get()}
+     * calls will return {@code null}, while the {@link Attribute} still be kept in the {@link AttributeMap}.
+     * If you want to also remove it completely use {@link #getAndRemove()}
+     */
+    T getAndRemoveValue();
 
     /**
      * Atomically sets the value to the given updated value if the current value == the expected value.
