@@ -31,7 +31,6 @@ import io.netty.handler.ssl.ApplicationProtocolConfig.Protocol;
 import io.netty.handler.ssl.ApplicationProtocolConfig.SelectedListenerFailureBehavior;
 import io.netty.handler.ssl.ApplicationProtocolConfig.SelectorFailureBehavior;
 import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.SupportedCipherSuiteFilter;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
@@ -42,6 +41,7 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 public final class Http2Server {
 
     static final boolean SSL = System.getProperty("ssl") != null;
+
     static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
 
     public static void main(String[] args) throws Exception {
@@ -49,7 +49,7 @@ public final class Http2Server {
         final SslContext sslCtx;
         if (SSL) {
             SelfSignedCertificate ssc = new SelfSignedCertificate();
-            sslCtx = SslContext.newServerContext(SslProvider.JDK,
+            sslCtx = SslContext.newServerContext(null,
                     ssc.certificate(), ssc.privateKey(), null,
                     Http2SecurityUtil.CIPHERS,
                     /* NOTE: the following filter may not include all ciphers required by the HTTP/2 specification
@@ -57,8 +57,8 @@ public final class Http2Server {
                     SupportedCipherSuiteFilter.INSTANCE,
                     new ApplicationProtocolConfig(
                             Protocol.ALPN,
-                            SelectorFailureBehavior.FATAL_ALERT,
-                            SelectedListenerFailureBehavior.FATAL_ALERT,
+                            SelectorFailureBehavior.CHOOSE_MY_LAST_PROTOCOL,
+                            SelectedListenerFailureBehavior.CHOOSE_MY_LAST_PROTOCOL,
                             SelectedProtocol.HTTP_2.protocolName(),
                             SelectedProtocol.HTTP_1_1.protocolName()),
                     0, 0);
