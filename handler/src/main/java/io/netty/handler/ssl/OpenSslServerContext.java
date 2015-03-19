@@ -72,6 +72,9 @@ public final class OpenSslServerContext extends OpenSslContext {
     }
 
     /**
+     * @deprecated use {@link #OpenSslServerContext(
+     *             File, File, String, Iterable, CipherSuiteFilter, ApplicationProtocolConfig, long, long)}
+     *
      * Creates a new instance.
      *
      * @param certChainFile an X.509 certificate chain file in PEM format
@@ -85,8 +88,6 @@ public final class OpenSslServerContext extends OpenSslContext {
      *                         {@code 0} to use the default value.
      * @param sessionTimeout the timeout for the cached SSL session objects, in seconds.
      *                       {@code 0} to use the default value.
-     * @deprecated use {@link #OpenSslServerContext(
-     *             File, File, String, Iterable, CipherSuiteFilter, ApplicationProtocolConfig, long, long)}
      */
     @Deprecated
     public OpenSslServerContext(

@@ -63,8 +63,8 @@ public final class OpenSslEngine extends SSLEngine {
 
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(OpenSslEngine.class);
 
-    private static final Certificate[] EMPTY_CERTIFICATES = new Certificate[0];
-    private static final X509Certificate[] EMPTY_X509_CERTIFICATES = new X509Certificate[0];
+    private static final Certificate[] EMPTY_CERTIFICATES = EmptyArrays.EMPTY_CERTIFICATES;
+    private static final X509Certificate[] EMPTY_X509_CERTIFICATES = EmptyArrays.EMPTY_JAVAX_X509_CERTIFICATES;
 
     private static final SSLException ENGINE_CLOSED = new SSLException("engine closed");
     private static final SSLException RENEGOTIATION_UNSUPPORTED = new SSLException("renegotiation unsupported");

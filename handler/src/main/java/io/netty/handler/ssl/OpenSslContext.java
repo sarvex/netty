@@ -183,18 +183,18 @@ public abstract class OpenSslContext extends SslContext {
                     int selectorBehavior = opensslSelectorFailureBehavior(apn.selectorFailureBehavior());
 
                     switch (apn.protocol()) {
-                        case NPN:
-                            SSLContext.setNpnProtos(ctx, protocols, selectorBehavior);
-                            break;
-                        case ALPN:
-                            SSLContext.setAlpnProtos(ctx, protocols, selectorBehavior);
-                            break;
-                        case NPN_AND_ALPN:
-                            SSLContext.setNpnProtos(ctx, protocols, selectorBehavior);
-                            SSLContext.setAlpnProtos(ctx, protocols, selectorBehavior);
-                            break;
-                        default:
-                            throw new Error();
+                    case NPN:
+                        SSLContext.setNpnProtos(ctx, protocols, selectorBehavior);
+                        break;
+                    case ALPN:
+                        SSLContext.setAlpnProtos(ctx, protocols, selectorBehavior);
+                        break;
+                    case NPN_AND_ALPN:
+                        SSLContext.setNpnProtos(ctx, protocols, selectorBehavior);
+                        SSLContext.setAlpnProtos(ctx, protocols, selectorBehavior);
+                        break;
+                    default:
+                        throw new Error();
                     }
                 }
 
@@ -230,12 +230,12 @@ public abstract class OpenSslContext extends SslContext {
 
     private static int opensslSelectorFailureBehavior(SelectorFailureBehavior behavior) {
         switch (behavior) {
-            case NO_ADVERTISE:
-                return SSL.SSL_SELECTOR_FAILURE_NO_ADVERTISE;
-            case CHOOSE_MY_LAST_PROTOCOL:
-                return SSL.SSL_SELECTOR_FAILURE_CHOOSE_MY_LAST_PROTOCOL;
-            default:
-                throw new Error();
+        case NO_ADVERTISE:
+            return SSL.SSL_SELECTOR_FAILURE_NO_ADVERTISE;
+        case CHOOSE_MY_LAST_PROTOCOL:
+            return SSL.SSL_SELECTOR_FAILURE_CHOOSE_MY_LAST_PROTOCOL;
+        default:
+            throw new Error();
         }
     }
 
@@ -354,33 +354,33 @@ public abstract class OpenSslContext extends SslContext {
         }
 
         switch (config.protocol()) {
-            case NONE:
-                return NONE_PROTOCOL_NEGOTIATOR;
-            case ALPN:
-            case NPN:
-            case NPN_AND_ALPN:
-                switch (config.selectedListenerFailureBehavior()) {
-                    case CHOOSE_MY_LAST_PROTOCOL:
-                    case ACCEPT:
-                        switch (config.selectorFailureBehavior()) {
-                            case CHOOSE_MY_LAST_PROTOCOL:
-                            case NO_ADVERTISE:
-                                return new DefaultOpenSslApplicationProtocolNegotiator(
-                                        config);
-                            default:
-                                throw new UnsupportedOperationException(
-                                        new StringBuilder("OpenSSL provider does not support ")
-                                                .append(config.selectorFailureBehavior())
-                                                .append(" behavior").toString());
-                        }
-                    default:
-                        throw new UnsupportedOperationException(
-                                new StringBuilder("OpenSSL provider does not support ")
-                                        .append(config.selectedListenerFailureBehavior())
-                                        .append(" behavior").toString());
+        case NONE:
+            return NONE_PROTOCOL_NEGOTIATOR;
+        case ALPN:
+        case NPN:
+        case NPN_AND_ALPN:
+            switch (config.selectedListenerFailureBehavior()) {
+            case CHOOSE_MY_LAST_PROTOCOL:
+            case ACCEPT:
+                switch (config.selectorFailureBehavior()) {
+                case CHOOSE_MY_LAST_PROTOCOL:
+                case NO_ADVERTISE:
+                    return new DefaultOpenSslApplicationProtocolNegotiator(
+                            config);
+                default:
+                    throw new UnsupportedOperationException(
+                            new StringBuilder("OpenSSL provider does not support ")
+                                    .append(config.selectorFailureBehavior())
+                                    .append(" behavior").toString());
                 }
             default:
-                throw new Error();
+                throw new UnsupportedOperationException(
+                        new StringBuilder("OpenSSL provider does not support ")
+                                .append(config.selectedListenerFailureBehavior())
+                                .append(" behavior").toString());
+            }
+        default:
+            throw new Error();
         }
     }
 }
